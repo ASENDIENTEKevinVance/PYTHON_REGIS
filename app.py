@@ -49,8 +49,8 @@ def index()->None:
 
 @app.route("/viewattendance")
 def viewattendance():
-    attendances = getall_records('attendance')
-    return render_template("view_attendance.html", pagetitle="view attendance", attendances=attendances)
+    attendances = getall_records('attendance')  # Fetch all attendance records
+    return render_template("view_attendance.html", pagetitle="View Attendance", attendances=attendances)
 
 @app.route("/checkattendance", methods=['GET', 'POST'])
 def checkattendance():

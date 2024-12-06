@@ -1,31 +1,37 @@
 {% extends 'base.html' %}
 {% block menu %}
-	<div class="w3-bar w3-blue">
-		<a href="/" class="w3-button w3-right">REGISTER</a>
-		<a href="/viewattendance" class="w3-button w3-right">VIEW ATTENDANCE</a>
-		<a href="/checkattendance" class="w3-button w3-right">CHECK ATTENDANCE</a>
-	</div>
+<div class="w3-bar w3-blue">
+    <a href="/" class="w3-button w3-right">REGISTER</a>
+    <a href="/viewattendance" class="w3-button w3-right">VIEW ATTENDANCE</a>
+    <a href="/checkattendance" class="w3-button w3-right">CHECK ATTENDANCE</a>
+</div>
 {% endblock %}
 {% block content %}
-	<div class="w3-twothird">
-		<table class="w3-table-all">
-			<tr>
-				<th>IDNO</th>
-				<th>NAME</th>
-				<th>COURSE</th>
-				<th>LOGIN TIME</th>
-			</tr>
-			{% for student in students %}
-			<tr>
-				<td>{{ student[1] }}</td>
-				<td>{{ student[2] }},{{ student[3] }}</td>
-				<td>{{ student[4] }}-{{ student[5] }}</td>
-				<td>
-					<button class="w3-button w3-green" onclick="edit('{{ student['idno'] }}','{{ student['lastname'] }}','{{ student['firstname'] }}','{{ student['course'] }}','{{ student['level'] }}','{{ student['image'] }}','{{ student['qrcode'] }}')">EDIT</button>
-					<a href="/deletestudent?idno={{ student[1] }}" class="w3-button w3-red">DELETE</a>
-				</td>
-			</tr>
-			{% endfor %}
-		</table>
-	</div>
+<div class="w3-container">
+    <h2>Attendance Records</h2>
+    {% if attendances %}
+    <table class="w3-table w3-bordered w3-striped">
+        <thead>
+            <tr>
+                <th>ID Number</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Log Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for attendance in attendances %}
+            <tr>
+                <td>{{ attendance['idno'] }}</td>
+                <td>{{ attendance['firstname'] }}</td>
+                <td>{{ attendance['lastname'] }}</td>
+                <td>{{ attendance['logtime'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No attendance records found.</p>
+    {% endif %}
+</div>
 {% endblock %}
