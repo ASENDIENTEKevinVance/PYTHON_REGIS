@@ -21,7 +21,7 @@ def register()->None:
     level:str = request.form['level']
     
     file = request.files['uploadimage']
-    image_filename = uploadfolder+"/register/"+file.filename
+    image_filename = os.path.join(uploadfolder, "register", file.filename)
     file.save(image_filename)
     ic(image_filename)
     
@@ -49,7 +49,7 @@ def index()->None:
 
 @app.route("/viewattendance")
 def viewattendance():
-    attendances = getall_records('attendance')  # Fetch all attendance records
+    attendances = getall_records('attendance')
     return render_template("view_attendance.html", pagetitle="View Attendance", attendances=attendances)
 
 @app.route("/checkattendance", methods=['GET', 'POST'])
@@ -57,18 +57,15 @@ def checkattendance():
     if request.method == 'POST':
         idno = request.form['idno']
         
-        # Search for the student
         sql = f"SELECT * FROM students WHERE idno = '{idno}'"
         student = getprocess(sql)
         
         if student:
-            # Record attendance
-            student = student[0]  # Get the first result
+            student = student[0]
             firstname = student['firstname']
             lastname = student['lastname']
             logtime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             
-            # Insert into attendance table
             ok = add_record(
                 'attendance',
                 idno=idno,
@@ -81,11 +78,14 @@ def checkattendance():
                 flash('Attendance recorded successfully!')
             else:
                 flash('Error recording attendance. Check database schema.')
+                
+            student_image_path = 'images/register/' + student['image'].split('/')[-1]
             
             return render_template(
                 "check_attendance.html",
                 pagetitle="check attendance",
-                student=student
+                student=student,
+                student_image_path=student_image_path
             )
         else:
             flash('No student found with the given ID number.')
