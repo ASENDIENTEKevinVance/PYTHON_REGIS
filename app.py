@@ -21,7 +21,8 @@ def register()->None:
     level:str = request.form['level']
     
     file = request.files['uploadimage']
-    image_filename = os.path.join(uploadfolder, "register", file.filename)
+    image_filename = uploadfolder+"/register/"+file.filename
+    # image_filename = os.path.join(uploadfolder, "register", file.filename)
     file.save(image_filename)
     ic(image_filename)
     
@@ -40,6 +41,8 @@ def register()->None:
 
 @app.route("/deletestudent",methods=['GET'])
 def deletestudent()->None:
+    idno:str = request.args.get('idno')
+    delete_record('students', idno=idno)
     return redirect("/")
 
 @app.route("/")

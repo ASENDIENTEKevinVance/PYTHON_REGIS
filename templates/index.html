@@ -23,7 +23,7 @@
 					<td>{{ student[4] }}-{{ student[5] }}</td>
 					<td>
 						<button class="w3-button w3-green" onclick="edit('{{ student['idno'] }}','{{ student['lastname'] }}','{{ student['firstname'] }}','{{ student['course'] }}','{{ student['level'] }}','{{ student['image'] }}','{{ student['qrcode'] }}')">EDIT</button>
-						<a href="/deletestudent?idno={{ student[1] }}" class="w3-button w3-red">DELETE</a>
+						<a href="/deletestudent?idno={{ student['idno'] }}" class="w3-button w3-red">DELETE</a>
 					</td>
 				</tr>
 				{% endfor %}
