@@ -9,25 +9,32 @@
 
 {% block content %}
 <div class="w3-container">
-    <h3>Search Student</h3>
-    <form method="post" action="/searchstudent">
-        <p>
-            <label for="idno"><b>Enter ID Number</b></label>
-            <input type="text" id="idno" name="idno" class="w3-input" required>
-        </p>
-        <p>
-            <button type="submit" class="w3-button w3-blue">Search</button>
-        </p>
-    </form>
-
-    {% if student %}
-    <div class="w3-card-4 w3-margin-top">
-        <img src="{{ url_for('static', filename='images/' + student['image']) }}" alt="Student Image" style="width:100px; height:100px;">
-        <p><b>First Name:</b> {{ student['firstname'] }}</p>
-        <p><b>Last Name:</b> {{ student['lastname'] }}</p>
+    <h3>Check Attendance</h3>
+    <div class="w3-row-padding">
+        <div class="w3-third">
+            <form method="post" action="/checkattendance">
+                <p>
+                    <label for="idno"><b>Enter ID Number</b></label>
+                    <input type="text" id="idno" name="idno" class="w3-input" required>
+                </p>
+                <p>
+                    <button type="submit" class="w3-button w3-blue">Search & Record Attendance</button>
+                </p>
+            </form>
+            {% if message %}
+            <p class="w3-text-red">{{ message }}</p>
+            {% endif %}
+        </div>
+        <div class="w3-twothird">
+            {% if student %}
+            <div class="w3-card-4 w3-padding">
+                <img src="{{ url_for('static', filename=student['image']) }}" alt="Student Image" style="width:150px; height:150px;">
+                <p><b>First Name:</b> {{ student['firstname'] }}</p>
+                <p><b>Last Name:</b> {{ student['lastname'] }}</p>
+                <p class="w3-text-green"><b>Attendance Recorded Successfully!</b></p>
+            </div>
+            {% endif %}
+        </div>
     </div>
-    {% elif student is not none %}
-    <p class="w3-text-red">No student found with the given ID number.</p>
-    {% endif %}
 </div>
 {% endblock %}
