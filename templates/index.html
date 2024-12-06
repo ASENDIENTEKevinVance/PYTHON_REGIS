@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block menu %}
+	<div class="w3-bar w3-blue">
+		<a href="/" class="w3-button w3-right">REGISTER</a>
+		<a href="/viewattendance" class="w3-button w3-right">VIEW ATTENDANCE</a>
+		<a href="/checkattendance" class="w3-button w3-right">CHECK ATTENDANCE</a>
+	</div>
+{% endblock %}
+{% block content %}
+	<div class="w3-row-padding">
+		<div class="w3-twothird">
+			<table class="w3-table-all">
+				<tr>
+					<th>IDNO</th>
+					<th>NAME</th>
+					<th>COURSE</th>
+					<th>ACTION</th>
+				</tr>
+				{% for student in students %}
+				<tr>
+					<td>{{ student[1] }}</td>
+					<td>{{ student[2] }},{{ student[3] }}</td>
+					<td>{{ student[4] }}-{{ student[5] }}</td>
+					<td>
+						<button class="w3-button w3-green" onclick="edit('{{ student['idno'] }}','{{ student['lastname'] }}','{{ student['firstname'] }}','{{ student['course'] }}','{{ student['level'] }}','{{ student['image'] }}','{{ student['qrcode'] }}')">EDIT</button>
+						<a href="/deletestudent?idno={{ student[1] }}" class="w3-button w3-red">DELETE</a>
+					</td>
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
+		<div class="w3-third" >
+			<div class="w3-padding w3-container w3-card-4 w3-round-xlarge">
+				<form method='post' action="/register" enctype="multipart/form-data">
+					<p class="w3-center">
+						<label for="uploadimage">
+						<img id="image" src="{{url_for('static',filename='images/personicon.png')}}" style="width:30%">
+						<input type="file" id="uploadimage" name="uploadimage" style="display:none" onchange="readURL(this)">
+						</label>
+					</p>
+					<p>
+						<div class="w3-center" >
+							<img id="qrcode" />
+						</div>
+					</p>
+					<p>
+						<label><b>IDNO</b></label>
+						<input type="text" id="idno" name="idno" class="w3-input">
+					</p>
+					<p>
+						<label><b>LASTNAME</b></label>
+						<input type="text" id="lastname" name="lastname" class="w3-input">
+					</p>
+					<p>
+						<label><b>FIRSTNAME</b></label>
+						<input type="text" id="firstname" name="firstname" class="w3-input">
+					</p>
+					<p>
+						<label><b>COURSE</b></label>
+						<input type="text" id="course" name="course" class="w3-input">
+					</p>
+					<p>
+						<label><b>LEVEL</b></label>
+						<input type="text" id="level" name="level" class="w3-input">
+					</p>
+					
+					<input type="hidden" id="flag" name="flag" value="{{ flag }}"> 
+					<p>
+						<input type="submit" value="SAVE" class="w3-button w3-blue">
+						<input type="reset" value="CANCEL" class="w3-button w3-red" onclick="clear()" />
+					</p>
+					
+					
+				</form>
+			</div>
+		</div>
+	</div>
+	
+{% endblock %}

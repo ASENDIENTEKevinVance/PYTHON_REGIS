@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie-edge">
+		<link rel="stylesheet" href="{{ url_for('static',filename='css/w3.css')}}">
+		<!--<script src="{{ url_for('static',filename='js/webcam.min.js')}}"></script>-->
+		<title>registration v1.0</title>
+	</head>
+	<body>
+		<div class="w3-container w3-padding w3-bar w3-blue" style="position:sticky;top:0">
+			<h3>
+				{{ pagetitle }}
+			</h3>
+			{% block menu %}
+			{% endblock %}
+		</div>
+		<div class="w3-container w3-padding">
+			<!--put messages here-->
+			{% with messages = get_flashed_messages() %}
+			{% if messages %}
+				{% for message in messages %}
+				<div class="w3-panel w3-amber w3-padding">
+					{{ message }}
+				</div>
+				{% endfor %}
+			{% endif %}
+			{% endwith  %}
+			
+			
+			{% block content %}
+			{% endblock %}
+		</div>
+		<div class="w3-center">
+			<hr/>
+			&copy; copyright 2024 KEVIN ASENDIENTE
+		</div>
+		<script language="JavaScript">
+		function readURL(input){
+			if(input.files && input.files[0]){
+				reader=new FileReader();
+				reader.onload = function(e){
+					document.getElementById('image').src=e.target.result;
+				}
+				reader.readAsDataURL(input.files[0]);
+			}
+		}
+		//
+		function edit(idno,lastname,firstname,course,level,image,qrcode){
+			document.getElementById('idno').value=idno;
+			document.getElementById('lastname').value=lastname;
+			document.getElementById('firstname').value=firstname;
+			document.getElementById('course').value=course;
+			document.getElementById('level').value=level;
+			document.getElementById('flag').value=1;
+			//
+			document.getElementById('image').src=image;
+			document.getElementById('qrcode').src=qrcode;
+			
+		}
+		//
+		function clear(){
+			//document.getElementById('image').src="../static/images/personicon.png";
+			//document.getElementById('idno').focus();
+			location.reload();
+		}
+	</script>
+	</body>
+</html>
