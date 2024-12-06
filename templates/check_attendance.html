@@ -8,31 +8,26 @@
 {% endblock %}
 
 {% block content %}
-    <div class="w3-row-padding">
-        <div class="w3-twothird">
-            <div class="w3-container">
-                <h3>Search Student</h3>
-                <form method="post" action="/searchstudent">
-                    <p>
-                        <label for="idno"><b>Enter ID Number</b></label>
-                        <input type="text" id="idno" name="idno" class="w3-input" required>
-                    </p>
-                    <p>
-                        <button type="submit" class="w3-button w3-blue">Search</button>
-                    </p>
-                </form>
-            </div>
-        </div>
-        <div class="w3-third" >
-            {% if student %}
-                <div class="w3-card-4 w3-margin-top">
-                    <img src="{{ url_for('static', filename='images/' + student['image']) }}" alt="Student Image" style="width:100px; height:100px;">
-                    <p><b>First Name:</b> {{ student['firstname'] }}</p>
-                    <p><b>Last Name:</b> {{ student['lastname'] }}</p>
-                </div>
-                {% elif student is not none %}
-                <p class="w3-text-red">No student found with the given ID number.</p>
-            {% endif %}
-        </div>   
-    </div>    
+<div class="w3-container">
+    <h3>Search Student</h3>
+    <form method="post" action="/searchstudent">
+        <p>
+            <label for="idno"><b>Enter ID Number</b></label>
+            <input type="text" id="idno" name="idno" class="w3-input" required>
+        </p>
+        <p>
+            <button type="submit" class="w3-button w3-blue">Search</button>
+        </p>
+    </form>
+
+    {% if student %}
+    <div class="w3-card-4 w3-margin-top">
+        <img src="{{ url_for('static', filename='images/' + student['image']) }}" alt="Student Image" style="width:100px; height:100px;">
+        <p><b>First Name:</b> {{ student['firstname'] }}</p>
+        <p><b>Last Name:</b> {{ student['lastname'] }}</p>
+    </div>
+    {% elif student is not none %}
+    <p class="w3-text-red">No student found with the given ID number.</p>
+    {% endif %}
+</div>
 {% endblock %}
