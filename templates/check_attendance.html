@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% block menu %}
 <div class="w3-bar w3-blue">
     <a href="/" class="w3-button w3-right">REGISTER</a>
@@ -9,7 +10,6 @@
 
 {% block content %}
 <div class="w3-container">
-    <h3>Check Attendance</h3>
     <div class="w3-row-padding">
         <div class="w3-third">
             <form method="post" action="/checkattendance">
@@ -21,19 +21,71 @@
                     <button type="submit" class="w3-button w3-blue">Search & Record Attendance</button>
                 </p>
             </form>
-            {% if message %}
-            <p class="w3-text-red">{{ message }}</p>
-            {% endif %}
-        </div>
-        <div class="w3-twothird">
-            {% if student %}
-            <div class="w3-card-4 w3-padding">
-                <img src="{{ url_for('static', filename=student_image_path) }}" alt="Student Image" style="width:150px; height:150px;">
-                <p><b>First Name:</b> {{ student['firstname'] }}</p>
-                <p><b>Last Name:</b> {{ student['lastname'] }}</p>
-                <p class="w3-text-green"><b>Attendance Recorded Successfully!</b></p>
+
+            <div style="text-align: center; display: flex; align-items: center; justify-content: center;">
+                <span style="flex-grow: 1; border-bottom: 1px solid #ccc; margin-top: 20px;"></span>
+                <span style="padding: 0 10px; margin-top: 20px;">or use the QR SCANNER below</span>
+                <span style="flex-grow: 1; border-bottom: 1px solid #ccc; margin-top: 20px;"></span>
             </div>
-            {% endif %}
+            <script src="https://cdn.jsdelivr.net/npm/html5-qrcode/minified/html5-qrcode.min.js"></script>
+            <div id="reader" style="width:100%; height:300px; margin-top: 10px;"></div>
+            <div id="qr-reader-results"></div>
+
+            <script>
+                function updateStudentDetails(data) {
+                    document.getElementById("student-image").src = data.image;
+                    document.getElementById("student-image").style.display = 'block';
+                    document.getElementById("student-firstname").innerHTML = `<b>${data.firstname.toUpperCase()}</b>`;
+                    document.getElementById("student-lastname").innerHTML = `<b>${data.lastname.toUpperCase()}</b>`;
+                    document.getElementById("attendance-message").textContent = data.message || "Attendance recorded successfully!";
+                }
+
+                function onScanSuccess(decodedText, decodedResult) {
+                    console.log(`Scan result: ${decodedText}`, decodedResult);
+
+                    fetch('/checkattendance', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ idno: decodedText })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            updateStudentDetails(data);
+                        } else {
+                            document.getElementById("qr-reader-results").textContent = `Error: ${data.message}`;
+                        }
+                    })
+                    .catch(error => {
+                        document.getElementById("qr-reader-results").textContent = '';
+                    });
+                }
+                window.onload = function () {
+                    const html5QrCode = new Html5Qrcode("reader");
+                    const config = { fps: 10, qrbox: 250 };
+
+                    html5QrCode.start(
+                        { facingMode: "environment" },
+                        config,
+                        onScanSuccess
+                    ).catch((err) => {
+                        console.error('Error initializing QR code scanner:', err);
+                        document.getElementById("qr-reader-results").textContent = 'Unable to initialize QR scanner.';
+                    });
+                };
+            </script>
+        </div>
+
+        <div class="w3-twothird">
+            <div class="w3-card-4 w3-padding" style= "margin-left:50px; color: white; box-shadow: none;">
+                {% if student_image_path %}
+                    <img id="student-image" src="{{ url_for('static', filename=student_image_path) }}" alt="Student Image" style="width:150px; height:150px; display: block;">
+                {% else %}
+                    <img id="student-image" src="" alt="Student Image" style="width:150px; height:150px; display: none;">
+                {% endif %}
+                <p id="student-firstname" style="color: black;"><b>{{ student.firstname.upper() if student else '' }}</b></p>
+                <p id="student-lastname" style="color: black;"><b>{{ student.lastname.upper() if student else '' }}</b></p>
+            </div>
         </div>
     </div>
 </div>
